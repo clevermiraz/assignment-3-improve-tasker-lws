@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { TasksDispatchContext } from "../contexts/taskContext";
+import { useTasksDispatch } from "../hooks/customHooks";
 
 export default function EditTaskModal({ closeEditTaskModal, editTask }) {
-    const dispatch = useContext(TasksDispatchContext);
+    const dispatch = useTasksDispatch();
 
     const [formData, setFormData] = useState({
         title: editTask.title,

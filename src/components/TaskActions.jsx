@@ -1,10 +1,9 @@
-import { useContext } from "react";
 import { toast } from "react-toastify";
-import { TasksDispatchContext } from "../contexts/taskContext";
+import { useTasksDispatch } from "../hooks/customHooks";
 import SearchBox from "./Searchbox";
 
 export default function TaskActions({ onIsAddModalOpen, onInputChange }) {
-    const dispatch = useContext(TasksDispatchContext);
+    const dispatch = useTasksDispatch();
 
     const handleDeleteAll = () => {
         if (window.confirm("Are you sure you want to delete this task?")) {
