@@ -47,6 +47,7 @@ export default function TaskTable() {
                             </h2>
                             <TaskActions
                                 onIsAddModalOpen={setIsAddModalOpen}
+                                inputValue={searchTerm}
                                 onInputChange={(searchTerm) => {
                                     setSearchTerm(searchTerm);
                                 }}

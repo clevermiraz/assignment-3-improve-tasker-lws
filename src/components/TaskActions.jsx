@@ -1,17 +1,16 @@
-import { useState } from "react";
 import { toast } from "react-toastify";
 import { useTasksDispatch } from "../hooks/customHooks";
 
-export default function TaskActions({ onIsAddModalOpen, onInputChange }) {
-    const [searchTerm, setSearchTerm] = useState("");
+export default function TaskActions({
+    onIsAddModalOpen,
+    inputValue,
+    onInputChange,
+}) {
+    const dispatch = useTasksDispatch();
 
     const handleChange = (e) => {
-        setSearchTerm(e.target.value);
-
         onInputChange(e.target.value);
     };
-
-    const dispatch = useTasksDispatch();
 
     const handleDeleteAll = () => {
         if (window.confirm("Are you sure you want to delete this task?")) {
@@ -34,7 +33,7 @@ export default function TaskActions({ onIsAddModalOpen, onInputChange }) {
                                 className="z-20 block w-full bg-gray-800 px-4 py-2 pr-10 focus:outline-none"
                                 placeholder="Search Task"
                                 required
-                                value={searchTerm}
+                                value={inputValue}
                                 onChange={handleChange}
                             />
                             <button
