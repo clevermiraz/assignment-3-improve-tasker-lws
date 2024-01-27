@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { taskList } from "../data/taskList";
+import taskReducer from "../reducers/taskReducer";
 import AddTaskModal from "./AddTaskModal";
 import EditTaskModal from "./EditTaskModal";
 import TaskActions from "./TaskActions";
@@ -8,7 +9,7 @@ import TaskActions from "./TaskActions";
 export default function TaskTable() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-    const [tasks, setTasks] = useState(taskList);
+    const [tasks, dispatch] = useReducer(taskReducer, taskList);
     const [editTask, setEditTask] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -29,18 +30,20 @@ export default function TaskTable() {
     };
 
     const handleAddNewTask = (newTask) => {
-        setTasks((prevTasks) => [newTask, ...prevTasks]);
+        dispatch({
+            type: "addedNewTask",
+            newTask,
+        });
 
         toast.success("Task Added Successfully");
         setIsAddModalOpen(false);
     };
 
     const handleEditTask = (editedTask) => {
-        setTasks((prevTasks) =>
-            prevTasks.map((task) =>
-                task.id === editedTask.id ? editedTask : task
-            )
-        );
+        dispatch({
+            type: "editedTask",
+            editedTask,
+        });
 
         toast.success("Task Edited Successfully");
         setEditTask(null);
@@ -49,28 +52,28 @@ export default function TaskTable() {
     const handleDelete = (taskId) => {
         // confirm before deleting
         if (window.confirm("Are you sure you want to delete this task?")) {
-            setTasks((prevTasks) =>
-                prevTasks.filter((task) => task.id !== taskId)
-            );
+            dispatch({
+                type: "deletedTask",
+                taskId,
+            });
             toast.success("Task Deleted Successfully");
         }
     };
 
     const handleDeleteAll = () => {
         if (window.confirm("Are you sure you want to delete this task?")) {
-            setTasks([]);
+            dispatch({
+                type: "deletedAllTasks",
+            });
             toast.success("All Tasks Deleted Successfully");
         }
     };
 
     const handleFavorite = (taskId) => {
-        setTasks((prevTasks) =>
-            prevTasks.map((task) =>
-                task?.id === taskId
-                    ? { ...task, isFavorite: !task?.isFavorite }
-                    : task
-            )
-        );
+        dispatch({
+            type: "toggleFavoriteTask",
+            taskId,
+        });
     };
 
     return (
