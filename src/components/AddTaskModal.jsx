@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import { TasksDispatchContext } from "../contexts/taskContext";
 
-export default function AddTaskModal({ onIsModalOpen, addNewTask }) {
+export default function AddTaskModal({ onIsModalOpen }) {
+    const dispatch = useContext(TasksDispatchContext);
+
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -55,7 +58,13 @@ export default function AddTaskModal({ onIsModalOpen, addNewTask }) {
         event.preventDefault();
 
         if (checkValidation()) {
-            addNewTask({ id: crypto.randomUUID(), ...formData });
+            dispatch({
+                type: "addedNewTask",
+                newTask: { id: crypto.randomUUID(), ...formData },
+            });
+
+            toast.success("Task Added Successfully");
+            onIsModalOpen(false);
         }
     };
 

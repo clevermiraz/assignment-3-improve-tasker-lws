@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import { TasksDispatchContext } from "../contexts/taskContext";
 
-export default function EditTaskModal({ closeEditTaskModal, editTask, task }) {
+export default function EditTaskModal({ closeEditTaskModal, editTask }) {
+    const dispatch = useContext(TasksDispatchContext);
+
     const [formData, setFormData] = useState({
-        title: task.title,
-        description: task.description,
-        tags: task.tags,
-        priority: task.priority,
+        title: editTask.title,
+        description: editTask.description,
+        tags: editTask.tags,
+        priority: editTask.priority,
     });
 
     const handleStopPropagation = (event) => {
@@ -55,7 +58,13 @@ export default function EditTaskModal({ closeEditTaskModal, editTask, task }) {
         event.preventDefault();
 
         if (checkValidation()) {
-            editTask({ ...formData, id: task.id });
+            dispatch({
+                type: "editedTask",
+                editedTask: { ...formData, id: editTask.id },
+            });
+
+            toast.success("Task Edited Successfully");
+            closeEditTaskModal(null);
         }
     };
 

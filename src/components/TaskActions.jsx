@@ -1,10 +1,20 @@
+import { useContext } from "react";
+import { toast } from "react-toastify";
+import { TasksDispatchContext } from "../contexts/taskContext";
 import SearchBox from "./Searchbox";
 
-export default function TaskActions({
-    onIsAddModalOpen,
-    onDeleteAllClick,
-    onInputChange,
-}) {
+export default function TaskActions({ onIsAddModalOpen, onInputChange }) {
+    const dispatch = useContext(TasksDispatchContext);
+
+    const handleDeleteAll = () => {
+        if (window.confirm("Are you sure you want to delete this task?")) {
+            dispatch({
+                type: "deletedAllTasks",
+            });
+            toast.success("All Tasks Deleted Successfully");
+        }
+    };
+
     return (
         <>
             <div className="flex items-center space-x-5">
@@ -17,7 +27,7 @@ export default function TaskActions({
                     Add Task
                 </button>
                 <button
-                    onClick={onDeleteAllClick}
+                    onClick={handleDeleteAll}
                     className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold"
                 >
                     Delete All
